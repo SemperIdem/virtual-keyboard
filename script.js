@@ -27,7 +27,6 @@ const keysLayout = [
   { code: 'KeyP', eng: 'p', rus: 'з'},
   { code: 'BracketLeft', eng: '[', rus: 'х'},
   { code: 'BracketRight', eng: ']', rus: 'ъ'},
-  { code: 'Backslash', eng: '\\', rus: '\\'},
   { code: 'Delete', eng: 'DEL', rus: 'DEL'},
 
   { code: 'CapsLock', eng: 'Caps Lock', rus: 'Caps Lock'},
@@ -55,16 +54,14 @@ const keysLayout = [
   { code: 'KeyM', eng: 'm', rus: 'ь'},
   { code: 'Comma', eng: ',', rus: 'б'},
   { code: 'Period', eng: '.', rus: 'ю'},
-  { code: 'Slash', eng: '/', rus: '.'},
   { code: 'ArrowUp', eng: '↑', rus: '↑'},
-  { code: 'ShiftRight', eng: 'Shift', rus: 'Shift'},
+  { code: 'Slash', eng: '/', rus: '.'},
+
   
   { code: 'ControlLeft', eng: 'Ctrl', rus: 'Ctrl'},
   { code: 'MetaLeft', eng: 'Win', rus: 'Win'},
   { code: 'AltLeft', eng: 'Alt', rus: 'Alt'},
   { code: 'Space', eng: ' ', rus: ' '},
-  { code: 'AltRight', eng: 'Alt', rus: 'Alt'},
-  { code: 'ControlRight', eng: 'Ctrl', rus: 'Ctrl'},
   { code: 'ArrowLeft', eng: '←', rus: '←'},
   { code: 'ArrowDown', eng: '↓', rus: '↓'},
   { code: 'ArrowRight', eng: '→', rus: '→'},
@@ -117,7 +114,6 @@ const Keyboard = {
     let index = keysLayout.findIndex((key) => key.code == event.code);
     console.log(index);
     if (index != -1) {
-      //let pressedKey = this.elements.keys[index];
       this.elements.keys[index].click();
 
     }
@@ -129,27 +125,32 @@ const Keyboard = {
     const fragment = document.createDocumentFragment();
     keysLayout.forEach(key => {
       const keyElement = document.createElement('button');
-      const insertLineBreak = ['Backspace', 'Delete', 'Enter', 'ShiftRightt', 'ArrowRight'].indexOf(key.code) != -1;
+      const insertLineBreak = ['Backspace', 'Delete', 'Enter', 'Slash', 'ArrowRight'].indexOf(key.code) != -1;
 
       keyElement.setAttribute('type', 'button');
       keyElement.classList.add('keyboard__key');
 
-      switch(key.eng) {
-        case 'backspace':
-          keyElement.classList.add('keyboard__key_wide');
-          
+      switch(key.code) {
+        case 'Backspace':
+          keyElement.textContent = key.eng;
           keyElement.addEventListener('click', () => {
             this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
-            this._triggerEvent('oninput');
+            this.elements.textarea.value = this.properties.value;
           });
           break;
-
+          case 'Space':
+            keyElement.textContent = 'SPACE';
+            keyElement.classList.add('keybiard__key_extra_wide');
+            keyElement.addEventListener('click', () => {
+              this.properties.value += key.eng.toLowerCase();
+              this.elements.textarea.value = this.properties.value;
+            });
+            break;
         default:
           keyElement.textContent = key.eng.toLowerCase();
-
           keyElement.addEventListener('click', () => {
             this.properties.value += key.eng.toLowerCase();
-            this._triggerEvent('oninput');
+            this.elements.textarea.value = this.properties.value;
           });
           break;
       }
