@@ -235,5 +235,9 @@ const Keyboard = {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
+  const text = document.createElement('p');
+  text.innerHTML = 'Клавиатура создана в WINDOWS 10. ' +'<br>'
+      + ' Переключение языка: ALT + SHIFT';
+  document.body.appendChild(text);
   Keyboard.init();
 });
