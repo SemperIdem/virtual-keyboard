@@ -149,10 +149,13 @@ const Keyboard = {
       keyElement.setAttribute('type', 'button');
       keyElement.classList.add('keyboard__key');
       let lang = this.properties.rus ? 'eng' : 'rus';
+      if (this.properties.capsLock) {
+        this.selectCapsLock();
+      }
       console.log("which? " + lang)
       switch(key.code) {
         case 'Backspace':
-          keyElement.textContent = 'backspace';
+          keyElement.textContent = '<==';
           keyElement.addEventListener('click', () => {
             this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
             this.elements.textarea.value = this.properties.value;
@@ -172,12 +175,18 @@ const Keyboard = {
               this.elements.textarea.value = this.properties.value;
             });
             break;
+            case 'CapsLock':
+              keyElement.textContent = 'Caps Lock';
+              keyElement.addEventListener('click', () => {
+                this.selectCapsLock();
+              });
+              break;
 
         default:
           keyElement.textContent = key[lang].toLowerCase();
           keyElement.addEventListener('click', () => {
-            this.properties.value += key[lang].toLowerCase();
-            this.elements.textarea.value = this.properties.value;
+            this.elements.textarea.value += this.properties.capsLock ? key[lang].toUpperCase() : key[lang].toLowerCase();
+            //this.elements.textarea.value = this.properties.value;
           });
           break;
       }
@@ -192,44 +201,15 @@ const Keyboard = {
     return fragment;
   },
 
-
-  // changeLanguage() {
-  //   console.log(this.elements.keys.length)
-  //   if (!this.properties.rus) {
-  //     this.elements.keys.forEach((key__element) => {
-  //       let index = keysLayout.findIndex((key) => key.eng.toLowerCase() == key__element.textContent.toLowerCase());
-  //       key__element.textContent = keysLayout[index].rus;
-  //     })
-  //   }
-  //   else {
-  //     this.elements.keys.forEach((key__element) => {
-  //       let index = keysLayout.findIndex((key) => key.rus.toLowerCase() == key__element.textContent.toLowerCase());
-  //       key__element.textContent = keysLayout[index].eng;
-  //     })
-  //   }
-  // },
-
-  _triggerEvent(handlerName) {
-    if (typeof this.eventHandlers[handlerName] == "function") {
-      this.eventHandlers[handlerName](this.properties.value);
-      console.log(this.elements.keys)
-  }
+  selectCapsLock() {
+    this.properties.capsLock = !this.properties.capsLock;
+    for (const key of this.elements.keys) {
+      if (key.childElementCount === 0) {
+          key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+      }
+    }
   },
-
-  
-  typeKeys(initialValue, oninput) {
-    this.properties.value = initialValue || "";
-    this.eventHandlers.oninput = oninput;
-  }
-
-
-  // clickButtonHandler() {
-  //   document.addEventListener('keydown', function(event) {
-  //     if(event)
-  //   })
-  // }
-
-};
+}
 
 window.addEventListener('DOMContentLoaded', function() {
   Keyboard.init();
