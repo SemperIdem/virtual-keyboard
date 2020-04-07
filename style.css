@@ -87,3 +87,8 @@ body {
   width: 45%;
   max-width: 601px;
 }
+
+p {
+  font-weight: 300;
+  color: white;
+}

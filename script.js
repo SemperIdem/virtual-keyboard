@@ -200,7 +200,7 @@ const Keyboard = {
               case 'Tab':
                 keyElement.textContent = 'tab';
                 break;
-              case 'AltLef':
+              case 'AltLeft':
                 keyElement.textContent = 'alt';
                 break;
 
