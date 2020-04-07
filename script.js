@@ -41,7 +41,7 @@ const keysLayout = [
   { code: 'KeyL', eng: 'l', rus: 'д' },
   { code: 'Semicolon', eng: ';', rus: 'ж'},
   { code: 'Quote', eng: '\'', rus: 'э'},
-  { code: 'Enter', eng: 'Enter', rus: 'Enter'},
+  { code: 'Enter', eng: '\n', rus: '\n'},
 
   { code: 'ShiftLeft', eng: 'Shift', rus: 'Shift'},
   { code: 'IntlBackslash', eng: '\\', rus: '\\'},
@@ -61,7 +61,7 @@ const keysLayout = [
   { code: 'ControlLeft', eng: 'Ctrl', rus: 'Ctrl'},
   { code: 'MetaLeft', eng: 'Win', rus: 'Win'},
   { code: 'AltLeft', eng: 'Alt', rus: 'Alt'},
-  { code: 'Space', eng: ' ', rus: ' '},
+  { code: 'Space', eng: 'SPACE', rus: 'SPACE'},
   { code: 'ArrowLeft', eng: '←', rus: '←'},
   { code: 'ArrowDown', eng: '↓', rus: '↓'},
   { code: 'ArrowRight', eng: '→', rus: '→'},
@@ -112,10 +112,29 @@ const Keyboard = {
   document.addEventListener('keydown', () => {
     event.preventDefault();
     let index = keysLayout.findIndex((key) => key.code == event.code);
-    console.log(index);
     if (index != -1) {
       this.elements.keys[index].click();
+      let pressedKey = this.elements.keys[index];
+      pressedKey.classList.add('keyboard__key_pressed');
 
+      if (event.shiftKey && event.altKey) {
+        console.log(this.properties.rus);
+        this.properties.rus = !this.properties.rus;
+        console.log(this.properties.rus);
+        let keyboard_keys = document.querySelector('.keyboard__keys');
+        keyboard_keys.innerHTML = '';
+        this.elements.keysContainer.appendChild(this._createKeys());
+        this.elements.keys = this.elements.keysContainer.querySelectorAll(".keyboard__key");
+        
+      }
+    }
+  });
+
+  document.addEventListener('keyup', () => {
+    let index = keysLayout.findIndex((key) => key.code == event.code);
+    if (index != -1) {
+      let pressedKey = this.elements.keys[index];
+      pressedKey.classList.remove('keyboard__key_pressed');
     }
   });
 
@@ -129,27 +148,35 @@ const Keyboard = {
 
       keyElement.setAttribute('type', 'button');
       keyElement.classList.add('keyboard__key');
-
+      let lang = this.properties.rus ? 'eng' : 'rus';
+      console.log("which? " + lang)
       switch(key.code) {
         case 'Backspace':
-          keyElement.textContent = key.eng;
+          keyElement.textContent = 'backspace';
           keyElement.addEventListener('click', () => {
             this.properties.value = this.properties.value.substring(0, this.properties.value.length - 1);
             this.elements.textarea.value = this.properties.value;
           });
           break;
           case 'Space':
-            keyElement.textContent = 'SPACE';
             keyElement.classList.add('keybiard__key_extra_wide');
             keyElement.addEventListener('click', () => {
-              this.properties.value += key.eng.toLowerCase();
+              this.properties.value += ' ';
               this.elements.textarea.value = this.properties.value;
             });
             break;
+          case 'Enter':
+            keyElement.textContent = 'enter';
+            keyElement.addEventListener('click', () => {
+              this.properties.value += '\n';
+              this.elements.textarea.value = this.properties.value;
+            });
+            break;
+
         default:
-          keyElement.textContent = key.eng.toLowerCase();
+          keyElement.textContent = key[lang].toLowerCase();
           keyElement.addEventListener('click', () => {
-            this.properties.value += key.eng.toLowerCase();
+            this.properties.value += key[lang].toLowerCase();
             this.elements.textarea.value = this.properties.value;
           });
           break;
@@ -166,15 +193,21 @@ const Keyboard = {
   },
 
 
-   pressKeys(){
-    let index = keysLayout.findIndex((key) => key.code == event.code);
-    console.log(index);
-    if (index != -1) {
-      //let pressedKey = this.elements.keys[index];
-      console.log(this.properties.value)
-
-    }
-  },
+  // changeLanguage() {
+  //   console.log(this.elements.keys.length)
+  //   if (!this.properties.rus) {
+  //     this.elements.keys.forEach((key__element) => {
+  //       let index = keysLayout.findIndex((key) => key.eng.toLowerCase() == key__element.textContent.toLowerCase());
+  //       key__element.textContent = keysLayout[index].rus;
+  //     })
+  //   }
+  //   else {
+  //     this.elements.keys.forEach((key__element) => {
+  //       let index = keysLayout.findIndex((key) => key.rus.toLowerCase() == key__element.textContent.toLowerCase());
+  //       key__element.textContent = keysLayout[index].eng;
+  //     })
+  //   }
+  // },
 
   _triggerEvent(handlerName) {
     if (typeof this.eventHandlers[handlerName] == "function") {
