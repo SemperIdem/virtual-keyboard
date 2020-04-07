@@ -181,12 +181,35 @@ const Keyboard = {
                 this.selectCapsLock();
               });
               break;
+            case 'Delete':
+              keyElement.textContent = 'del';
+              keyElement.addEventListener('click', () => {
+                this.properties.value = '';
+                this.elements.textarea.value = this.properties.value;
+              });
+              break;
+              case 'ShiftLeft':
+                keyElement.textContent = 'shift';
+                break;
+              case 'MetaLeft':
+                keyElement.textContent = 'win';
+                break;
+              case 'ControlLeft':
+                keyElement.textContent = 'ctrl';
+                break;
+              case 'Tab':
+                keyElement.textContent = 'tab';
+                break;
+              case 'AltLef':
+                keyElement.textContent = 'alt';
+                break;
+
 
         default:
           keyElement.textContent = key[lang].toLowerCase();
           keyElement.addEventListener('click', () => {
-            this.elements.textarea.value += this.properties.capsLock ? key[lang].toUpperCase() : key[lang].toLowerCase();
-            //this.elements.textarea.value = this.properties.value;
+            this.properties.value += this.properties.capsLock ? key[lang].toUpperCase() : key[lang].toLowerCase();
+            this.elements.textarea.value = this.properties.value;
           });
           break;
       }
