@@ -100,16 +100,7 @@ const Keyboard = {
     this.elements.main.appendChild(this.elements.keysContainer);
     document.body.appendChild(this.elements.textarea);
     document.body.appendChild(this.elements.main);
-
-    document.querySelectorAll(".input-text").forEach(element => {
-      element.addEventListener("focus", () => {
-          this.typeKeys(element.value, currentValue => {
-              element.value = currentValue;
-          });
-      });
-  });
-
-  document.addEventListener('keydown', () => {
+    document.addEventListener('keydown', () => {
     event.preventDefault();
     let index = keysLayout.findIndex((key) => key.code == event.code);
     if (index != -1) {
