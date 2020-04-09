@@ -18,8 +18,7 @@ body {
   padding: 5px 0;
   background: #5e0101;
   box-shadow: 0 0 50px rgba(0, 0, 0 ,0.5);
-  user-select: none;
-  transition: bottom 0.4s;
+  border: black 1px solid;
 }
 
 
